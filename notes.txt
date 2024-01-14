@@ -23,3 +23,25 @@ This helps in avoiding potential race conditions where the app container might s
 The links directive is not necessary in the latest versions of Docker Compose. Containers within the same network can 
 communicate with each other using their service names as hostnames. In this case, since both services are in the same
 docker-compose.yml file, the app service can connect to the mongo service using the hostname "mongo."
+
+const mongoose = require('mongoose');
+
+const mongoUri = 'mongodb://mongo:27017/your-database-name';
+
+mongoose.connect(mongoUri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+const db = mongoose.connection;
+
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+db.once('open', () => {
+  console.log('Connected to MongoDB');
+});
+
+
+
+step=2:
+------
+run docker-compose -up

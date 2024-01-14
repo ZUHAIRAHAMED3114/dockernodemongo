@@ -1,0 +1,25 @@
+version: '3'
+services:
+  app:
+    container_name: docker-node-mongo
+    restart: always
+    build: .
+    ports:
+      - '80:3000'
+    depends_on:
+      - mongo
+    links:
+      - mongo
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+      - '27017:27017'
+
+
+I added depends_on to the app service to ensure that the app container starts only after the mongo container is up and running.
+This helps in avoiding potential race conditions where the app container might start before the mongo container.
+
+The links directive is not necessary in the latest versions of Docker Compose. Containers within the same network can 
+communicate with each other using their service names as hostnames. In this case, since both services are in the same
+docker-compose.yml file, the app service can connect to the mongo service using the hostname "mongo."
